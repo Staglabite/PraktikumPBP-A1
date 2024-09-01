@@ -1,0 +1,164 @@
+<!DOCTYPE HTML> 
+<html>
+<head>
+  <title>Validasi Form dengan JavaScript</title>
+<script>
+function validateForm() {
+	//validasi name tidak boleh kosong
+	if(document.forms["formRegistration"]["name"].value == ""){
+		alert("Please fill your name.");
+		document.forms["formRegistration"]["name"].focus();
+		return false;
+	}
+	//validasi gender tidak boleh kosong
+	if(document.forms["formRegistration"]["gender"].value == ""){
+		alert("Please select your gender.");
+		return false;
+	}
+	//validasi gender tidak boleh kosong dan harus numerik
+	if(document.forms["formRegistration"]["height"].value == ""){
+		alert("Please fill your height.");
+		document.forms["formRegistration"]["height"].focus();
+		return false;
+	}else if(isNaN(document.forms["formRegistration"]["height"].value)){
+		alert("Height must be numeric");
+		document.forms["formRegistration"]["height"].value = "";
+		document.forms["formRegistration"]["height"].focus();
+		return false;
+	}
+	//validasi alamat tidak boleh kosong
+	if(document.forms["formRegistration"]["address"].value == ""){
+		alert("Please fill your address.");
+		document.forms["formRegistration"]["address"].focus();
+		return false;
+	}
+	//validasi kota tidak boleh kosong
+	if(document.forms["formRegistration"]["city"].value == ""){
+		alert("Please select your city.");
+		document.forms["formRegistration"]["city"].focus();
+		return false;
+	}
+	//validasi hobby, minimal pilih salah satu
+	var hobby = document.forms["formRegistration"]["hobby[]"];
+	if(hobby[0].checked == false && hobby[1].checked == false && hobby[2].checked == false && hobby[3].checked == false){
+		alert("Please select at least one hobby.");
+		return false;
+	}
+	//validasi text captcha harus sesuai dengan captcha yang di-generate
+	if(document.forms["formRegistration"]["captcha_input"].value != document.forms["formRegistration"]["captcha_text"].value){
+		alert("Please type Captcha correctly.");
+	}
+	alert('Success! Thank you for filling the form.')
+    return true;
+}
+
+//fungsi untuk mengisi elemen <select id="city"> sesuai nilai province yang dipilih
+function get_city(){
+	let province = document.forms["formRegistration"]["province"].value;
+	if(province == "West Java"){
+		document.getElementById("city").innerHTML = 
+		'<option value="Bandung">Bandung</option>' +
+		'<option value="Kuningan">Kuningan</option>' +
+		'<option value="Indramayu">Indramayu</option>';
+	}
+	if(province == "Central Java"){
+		document.getElementById("city").innerHTML = 
+		'<option value="Semarang">Semarang</option>' +
+		'<option value="Ungaran">Ungaran</option>' +
+		'<option value="Solo">Solo</option>';
+	}
+	if(province == "East Java"){
+		document.getElementById("city").innerHTML = 
+		'<option value="Surabaya">Surabaya</option>' +
+		'<option value="Sidoarjo">Sidoarjo</option>' +
+		'<option value="Malang">Malang</option>';
+	}
+}
+
+//Generates the captcha function
+function generateCaptcha(){
+	let a = Math.ceil(Math.random() * 9)+ '';
+	let b = Math.ceil(Math.random() * 9)+ '';
+	let c = Math.ceil(Math.random() * 9)+ '';
+	let d = Math.ceil(Math.random() * 9)+ '';
+	let e = Math.ceil(Math.random() * 9)+ '';
+	let code = a + b + c + d + e;
+	document.forms["formRegistration"]["captcha_text"].value = code;
+}
+</script>
+</head>
+
+<body onload="generateCaptcha()"> 
+<h2>User Input</h2>
+<form id="formRegistration" method="GET" autocomplete="on" action="" onsubmit="return validateForm()">
+<table>
+	<tr>
+		<td><label for="name">Nama</label></td>
+		<td><input type="text" name="name" id="name" size="30" /></td>
+	</tr>
+	<tr>
+		<td>Gender</td>
+		<td>
+			<input type="radio" name="gender" id="male" value="male">
+			<label for="male">Male</label><br />
+			<input type="radio" name="gender" id="female" value="female">
+			<label for="female">Pria</label>
+		</td>
+	</tr>
+	<tr>
+		<td><label for="height">Height</label></td>
+		<td><input type="text" name="height" id="height" size="10"></td>
+	</tr>
+	<tr>
+		<td>Address</td>
+		<td><textarea name="address" rows="5" cols="30"></textarea></td>
+	</tr>
+	<tr>
+		<td><label for="province">Province</label></td>
+		<td><select name="province" id="province" onchange="get_city()">
+			  <option value="">--Select a province--</option>
+			  <option value="West Java">West Java</option>
+			  <option value="Central Java">Central Java</option>
+			  <option value="East Java">East Java</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td><label for="city">City</label></td>
+		<td><select name="city" id="city">
+			  <option value="">--Select a city--</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td><label for="hobby">Hobby</label></td>
+		<td>
+			<input type="checkbox" name="hobby[]" id="travelling" value="travelling">
+			<label for="travelling">Travelling</label><br />
+			<input type="checkbox" name="hobby[]" id="reading" value="reading">
+			<label for="reading">Reading</label><br /> 
+			<input type="checkbox" name="hobby[]" id="swimming" value="swimming">
+			<label for="swimming">Swimming</label><br /> 
+			<input type="checkbox" name="hobby[]" id="painting" value="painting">
+			<label for="painting">Painting</label><br /> 
+		</td>
+	</tr>
+	<tr>
+		<td><label for="captcha">Captcha</label></td>
+		<td>
+		  <input type="text" name="captcha_text" size="10" disabled>
+		  <input type="text" name="captcha_input" id="captcha_input" size="10">
+		</td>
+	</tr>
+	<script>
+		
+	</script>
+	<tr>
+		<td colspan="2"><br><input type="submit" name="submit" value="Submit">&nbsp; 
+		<input type="reset" name="reset" value="Reset"></td>
+	</tr>
+</table>
+</form>
+
+</body>
+</html>
